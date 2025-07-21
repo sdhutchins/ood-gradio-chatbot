@@ -15,6 +15,7 @@ script:
     - "--time=<%= bc_num_hours %>:00:00"
     - "--cpus-per-task=<%= bc_num_slots %>"
     - "--mem=<%= memory %>G"
+    - "--job-name=ood-gradio-chat"
 <%- if num_gpus.to_i > 0 -%>
     - "--gpus=<%= num_gpus %>"
 <%- end -%>
