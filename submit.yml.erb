@@ -7,6 +7,10 @@
 ---
 batch_connect:
   template: "basic"
+  script_wrapper: |
+    set +o posix
+    . ~/.bashrc
+    %s
 script:
   job_environment:
     USER: "<%= ENV['USER'] %>"
