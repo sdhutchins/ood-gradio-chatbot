@@ -8,18 +8,15 @@ set -x
 # Load Anaconda3 module for Python
 module load Anaconda3
 module load GCC
-    
-# Debug: Check current directory and locate app.py
-echo "Current working directory: $(pwd)"
-echo "Files in current directory:"
-ls -la
-echo "Looking for app.py:"
-find . -name "app.py" -type f 2>/dev/null || echo "app.py not found in current directory tree"
-echo "BATCH_CONNECT_TEMPLATE_ROOT: ${BATCH_CONNECT_TEMPLATE_ROOT}"
-echo "APP variable: ${APP}"
 
 # activate the environment
 . ${HOME}/env-chatbot/bin/activate
+
+# Debug: Check what Python is actually being used
+echo "After activation - Python version:"
+python3 --version
+echo "After activation - Which python3:"
+which python3
 
 # launch the gradio application
 python3 $APP
