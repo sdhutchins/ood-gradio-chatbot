@@ -21,26 +21,36 @@ This project provides a simple, reproducible interface for deploying a local LLM
 ## Install & Setup
 
 - **Python version:** 3.11+
-- **Other software:** Gradio, llama-cpp-python, build tools (GCC)
+- **Other software:** Gradio, llama-cpp-python, build tools (GCC, CMake, OpenBLAS, CUDA)
 
 ### Instructions
 
 1. **Create and activate a Python virtual environment:**
    ```sh
    module load Anaconda3
-   module load GC
-   python3 -m venv ${HOME}/env-chatbot
-   . ${HOME}/env-chatbot/bin/activate
+   module load GCCcore/12.2.0
+   module load GCC/12.2.0           # if this exists — otherwise skip
+   module load CUDA/12.3.0
+   module load CMake/3.24.3-GCCcore-12.2.0
+   conda activate env-chatbot
+   conda env create -f env-chatbot.yml
+   conda activate env-chatbot
+
+   # Set compiler environments
+   export CC=$(which gcc)
+   export CXX=$(which g++)
+   export CUDAHOSTCXX=$CXX
+   export CUDACXX=$(which nvcc)
    ```
 2. **Upgrade pip and install dependencies:**
    ```sh
-   python3 -m pip install --upgrade pip setuptools wheel
-   python3 -m pip install numpy gradio llama_cpp_python
+   CMAKE_ARGS="-DLLAMA_CUDA=on -DLLAMA_CUBLAS=on -DLLAMA_CUDA_FORCE_DMMV=on -DLLAMA_NATIVE=off" pip install llama-cpp-python==0.2.77 --no-binary :all:
    ```
 3. **Download a pre-trained LLM model (GGUF format):**
    ```sh
    mkdir -p ${HOME}/llm
-   wget https://huggingface.co/professorf/Meta-Llama-3-1-8B-Instruct-f16-gguf/resolve/main/llama-3-1-8b-instruct-f16.gguf -O ${HOME}/llm/llama-3-1-8b-instruct-f16.gguf
+   # Download a smaller, more reliable model
+   wget https://huggingface.co/microsoft/Phi-3-mini-4k-instruct-gguf/resolve/main/Phi-3-mini-4k-instruct-q4.gguf -O ${HOME}/llm/Phi-3-mini-4k-instruct-q4.gguf
    ```
 
 ## Usage
@@ -56,7 +66,6 @@ This project provides a simple, reproducible interface for deploying a local LLM
 ```sh
 $ tree -a ood-gradio-chatbot/
 ood-gradio-chatbot/
-├── app.py                  # Gradio chatbot application
 ├── README.md               # This file
 ├── icon.png                # App icon
 ├── manifest.yml            # App metadata
