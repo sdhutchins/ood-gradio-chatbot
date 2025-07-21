@@ -19,12 +19,44 @@ export MODEL="${HOME}/llm/llama-3-1-8b-instruct-f16.gguf"
 umask 077
 cat > "$APP" << EOL
 
-import llama_cpp
+print("Starting Python script...")
+
+print("Importing gradio...")
 import gradio as gr
+
+print("Importing os...")
 import os
 
+print("Importing llama_cpp...")
+import llama_cpp
+print("llama_cpp imported successfully!")
+
 MODEL = os.environ.get("MODEL", os.path.expanduser("~/llm/llama-3-1-8b-instruct-f16.gguf"))
-llama = llama_cpp.Llama(model_path=MODEL, n_gpu_layers=-1, context=2048, verbose=False)
+print(f"Model path: {MODEL}")
+
+# Check for GPU availability and configure accordingly
+try:
+    print("Attempting to load model with GPU...")
+    # Try GPU-accelerated loading
+    llama = llama_cpp.Llama(
+        model_path=MODEL, 
+        n_gpu_layers=-1,  # Use all GPU layers
+        n_ctx=2048, 
+        verbose=True,
+        n_threads=16,
+        n_batch=512
+    )
+    print("GPU acceleration enabled")
+except Exception as e:
+    print(f"GPU failed, falling back to CPU: {e}")
+    # Fallback to CPU if GPU fails
+    llama = llama_cpp.Llama(
+        model_path=MODEL, 
+        n_gpu_layers=0, 
+        n_ctx=2048, 
+        verbose=True
+    )
+
 model = "llama-3.1-8b-instruct"
 
 def predict(message, history):
@@ -56,6 +88,7 @@ with gr.Blocks(theme=gr.themes.Soft(), fill_height=True, head='<link rel="icon" 
     )
 
 if __name__ == "__main__":
+    print("Launching Gradio app...")
     demo.launch()
 EOL
 )

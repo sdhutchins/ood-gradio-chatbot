@@ -12,12 +12,6 @@ module load GCC
 # activate the environment
 . ${HOME}/env-chatbot/bin/activate
 
-# Debug: Check what Python is actually being used
-echo "After activation - Python version:"
-python3 --version
-echo "After activation - Which python3:"
-which python3
-
 # launch the gradio application
 python3 $APP
 
