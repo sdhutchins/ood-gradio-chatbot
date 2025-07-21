@@ -9,8 +9,8 @@ export FORWARDED_ALLOW_IPS="127.0.0.1"
 
 ################################################################################
 
-# Use staged root where OOD copies files
-export APP="<%= session.staged_root.join('app.py') %>"
+# app.py will be copied by OOD copy_environment
+export APP="./app.py"
 export HF_HOME="/scratch/${SLURM_JOB_ID}"
 export MODEL="${HOME}/llm/llama-3-1-8b-instruct-f16.gguf"
 

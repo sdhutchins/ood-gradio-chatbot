@@ -10,6 +10,8 @@ batch_connect:
 script:
   job_environment:
     USER: "<%= ENV['USER'] %>"
+  copy_environment:
+    - "app.py"
   native:
     - "--partition=<%= bc_partition %>"
     - "--time=<%= bc_num_hours %>:00:00"
