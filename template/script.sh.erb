@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+echo "Starting main script..."
+echo "TTT - $(date)"
+
+set -x
+
+# Load Anaconda3 module for Python
+module load Anaconda3
+module load GCC
+    
+# activate the environment
+. ${HOME}/env-chatbot/bin/activate
+
+# launch the gradio application
+python3 $APP
+
+echo "TTT - $(date)"

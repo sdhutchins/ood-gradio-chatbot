@@ -1,0 +1,16 @@
+# Find available port to run server on
+port=$(find_port ${host})
+
+export GRADIO_SERVER_PORT=${port}
+export GRADIO_SERVER_NAME="0.0.0.0"
+export GRADIO_DEBUG=1
+export GRADIO_ROOT_PATH="/node/${host}/${port}"
+export FORWARDED_ALLOW_IPS="127.0.0.1"
+
+################################################################################
+
+export APP="${PWD}/app.py"
+export HF_HOME="/scratch/${SLURM_JOB_ID}"
+export MODEL="${HOME}/llm/llama-3-1-8b-instruct-f16.gguf"
+
+################################################################################

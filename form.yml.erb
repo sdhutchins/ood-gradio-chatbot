@@ -1,0 +1,52 @@
+<%-
+  partitions = OodAppkit.clusters[:SLURM_CLUSTER].custom_config[:partitions]
+-%>
+---
+cluster: "SLURM_CLUSTER"
+attributes:
+  bc_num_hours:
+    widget: "number_field"
+    label: "Number of hours"
+    value: 1
+    min: 1
+    max: 12
+    step: 1
+
+  bc_num_slots:
+    widget: "number_field"
+    label: "Number of CPUs"
+    value: 1
+    min: 1
+    max: 48
+    step: 1
+
+  memory:
+    widget: "number_field"
+    label: "Memory (GB)"
+    value: 8
+    min: 1
+    max: 128
+    step: 1
+
+  num_gpus:
+    widget: "number_field"
+    label: "GPUs"
+    value: 0
+    min: 0
+    max: 4
+    step: 1
+
+  bc_partition:
+    widget: select
+    label: "Partition"
+    options:
+    <%- partitions.each do |p| -%>
+      - [ "<%= p %>", "<%= p %>" ]
+    <%- end -%>
+
+form:
+  - bc_partition
+  - bc_num_hours
+  - bc_num_slots
+  - memory
+  - num_gpus

@@ -1,0 +1,20 @@
+<%-
+  email = ENV['USER']
+  if !email.include? '@'
+    email = email + '@uab.edu'
+  end
+-%>
+---
+batch_connect:
+  template: "basic"
+script:
+  job_environment:
+    USER: "<%= ENV['USER'] %>"
+  native:
+    - "--partition=<%= bc_partition %>"
+    - "--time=<%= bc_num_hours %>:00:00"
+    - "--cpus-per-task=<%= bc_num_slots %>"
+    - "--mem=<%= memory %>G"
+<%- if num_gpus.to_i > 0 -%>
+    - "--gpus=<%= num_gpus %>"
+<%- end -%>

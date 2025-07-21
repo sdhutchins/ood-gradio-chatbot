@@ -1,0 +1,41 @@
+#!/usr/bin/env python3
+
+import llama_cpp
+import llama_cpp.llama_tokenizer
+import gradio as gr
+import os
+
+MODEL = os.environ.get("MODEL", os.path.expanduser("~/llm/llama-3-1-8b-instruct-f16.gguf"))
+llama = llama_cpp.Llama(model_path=MODEL, n_gpu_layers=-1, context=2048, verbose=False)
+model = "llama-3.1-8b-instruct"
+
+def predict(message, history):
+    messages = []
+    for user_message, assistant_message in history:
+        messages.append({"role": "user", "content": user_message})
+        messages.append({"role": "assistant", "content": assistant_message})
+    messages.append({"role": "user", "content": message})
+
+    response = llama.create_chat_completion_openai_v1(model=model, messages=messages, stream=True)
+
+    text = ""
+    for chunk in response:
+        content = chunk.choices[0].delta.content
+        if content:
+            text += content
+            yield text
+
+with gr.Blocks(theme=gr.themes.Soft(), fill_height=True, head='<link rel="icon" href="/favicon.ico">') as demo:
+    gr.ChatInterface(
+        predict,
+        fill_height=True,
+        examples=[
+            "What year is it?",
+            "Where is Wake Forest University?",
+            "What is Open OnDemand?",
+            "How many r's are in the word strawberry?",
+        ],
+    )
+
+if __name__ == "__main__":
+    demo.launch() 
