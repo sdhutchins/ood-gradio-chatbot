@@ -28,11 +28,13 @@ This project provides a simple, reproducible interface for deploying a local LLM
 1. **Create and activate a Python virtual environment:**
    ```sh
    module load Anaconda3
-   module load GCCcore/12.2.0
-   module load GCC/12.2.0           # if this exists — otherwise skip
-   module load CUDA/12.3.0
-   module load CMake/3.24.3-GCCcore-12.2.0
-   conda activate env-chatbot
+   module load GCCcore/11.4.0
+   module load GCC/11.4.0             # Skip if not available
+   module load CUDA/11.8.0
+   module load cuDNN/8.9.2.26-CUDA-11.8.0
+   module load CMake/3.26.4-GCCcore-11.4.0
+
+   # Create and activate conda env
    conda env create -f env-chatbot.yml
    conda activate env-chatbot
 
@@ -44,7 +46,7 @@ This project provides a simple, reproducible interface for deploying a local LLM
    ```
 2. **Upgrade pip and install dependencies:**
    ```sh
-   CMAKE_ARGS="-DLLAMA_CUDA=on -DLLAMA_CUBLAS=on -DLLAMA_CUDA_FORCE_DMMV=on -DLLAMA_NATIVE=off" pip install llama-cpp-python==0.2.77 --no-binary :all:
+   CMAKE_ARGS="-DLLAMA_CUDA=on -DLLAMA_CUBLAS=on -DLLAMA_CUDA_FORCE_DMMV=on -DLLAMA_NATIVE=off" pip install llama-cpp-python==0.3.14 --no-binary :all:
    ```
 3. **Download a pre-trained LLM model (GGUF format):**
    ```sh
