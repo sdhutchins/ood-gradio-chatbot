@@ -23,17 +23,14 @@ cat > "$APP" << EOL
 print("Starting Python script...")
 
 import multiprocessing
-cpu_threads = int(os.environ.get("SLURM_CPUS_PER_TASK", multiprocessing.cpu_count()))
-
-print("Importing gradio...")
 import gradio as gr
-
-print("Importing os...")
 import os
 
 print("Importing llama_cpp...")
 import llama_cpp
 print("llama_cpp imported successfully!")
+
+cpu_threads = int(os.environ.get("SLURM_CPUS_PER_TASK", multiprocessing.cpu_count()))
 
 MODEL = os.environ.get("MODEL", os.path.expanduser("~/llm/Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf"))
 print(f"Model path: {MODEL}")
