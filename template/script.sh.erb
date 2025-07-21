@@ -5,14 +5,16 @@ echo "TTT - $(date)"
 
 set -x
 
-# Load Anaconda3 module for Python
+# Load required modules for runtime libraries
 module load Anaconda3
 module load GCC
+module load OpenBLAS
+module load CMake
 
 # activate the environment
 . ${HOME}/env-chatbot/bin/activate
 
 # launch the gradio application
-${HOME}/env-chatbot/bin/python3 $APP
+python3 $APP
 
 echo "TTT - $(date)"
