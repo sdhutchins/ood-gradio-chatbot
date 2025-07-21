@@ -12,6 +12,7 @@ export FORWARDED_ALLOW_IPS="127.0.0.1"
 export APP="${PWD}/app.py"
 export HF_HOME="/scratch/${SLURM_JOB_ID}"
 export MODEL="${HOME}/llm/Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf"
+export SLURM_CPUS_PER_TASK=${SLURM_CPUS_PER_TASK:-$(nproc)}
 
 ################################################################################
 
@@ -20,6 +21,9 @@ umask 077
 cat > "$APP" << EOL
 
 print("Starting Python script...")
+
+import multiprocessing
+cpu_threads = int(os.environ.get("SLURM_CPUS_PER_TASK", multiprocessing.cpu_count()))
 
 print("Importing gradio...")
 import gradio as gr
@@ -43,7 +47,7 @@ try:
         n_gpu_layers=-1,  # Use all GPU layers
         n_ctx=4096, 
         verbose=False,
-        n_threads=16,
+        n_threads=cpu_threads,
         n_batch=768,
         use_mlock=True,
         low_vram=False
