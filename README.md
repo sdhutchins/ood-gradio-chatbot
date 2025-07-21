@@ -2,6 +2,8 @@
 
 A minimal Open OnDemand app for launching a Gradio-based LLM chatbot on UAB's Cheaha HPC cluster.
 
+This was modified from and inspired by Wake Forest's HPC example of [OOD-GradioApps](https://github.com/WFU-HPC/OOD-GradioApps/tree/main).
+
 ## Table of Contents
 
 - [Project Background](#project-background)
